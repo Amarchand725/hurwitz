@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('title', $page_title)
 @section('content')
-<input type="hidden" id="page_url" value="{{ route('category.index') }}">
+<input type="hidden" id="page_url" value="{{ route('user.index') }}">
 <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
     <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
         <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
@@ -63,8 +63,8 @@
                                         <tr>
                                             <th width="250px">Avatar</th>
                                             <td>
-                                                @if($model->hasProfile->avatar)
-                                                    <img src="{{ asset('public/avatar') }}/{{ $model->hasProfile->avatar }}" class="rounded" width="50px" alt="">
+                                                @if(!empty($model->avatar))
+                                                    <img src="{{ asset('public/avatar') }}/{{ $model->avatar }}" class="rounded" width="50px" alt="">
                                                 @else
                                                     <img src="{{ asset('public/avatar/default.png') }}" width="50px" alt="">
                                                 @endif
@@ -75,24 +75,20 @@
                                             <td>{!! date('d, M Y h:i A', strtotime($model->created_at)) !!}</td>
                                         </tr>
                                         <tr>
-                                            <th>First Name</th>
-                                            <td>{!! isset($model->hasProfile)?$model->hasProfile->first_name:'' !!}</td>
+                                            <th>Name</th>
+                                            <td>{!! $model->name !!}</td>
                                         </tr>
                                         <tr>
-                                            <th>Last Name</th>
-                                            <td>{!! isset($model->hasProfile)?$model->hasProfile->last_name:'' !!}</td>
+                                            <th>User Name</th>
+                                            <td>{!! $model->user_name !!}</td>
                                         </tr>
                                         <tr>
                                             <th>Phone</th>
-                                            <td>{!! isset($model->hasProfile)?$model->hasProfile->phone:'' !!}</td>
+                                            <td>{!! $model->phone !!}</td>
                                         </tr>
                                         <tr>
                                             <th>Email</th>
                                             <td>{!! isset($model->email)?$model->email:'' !!}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Address</th>
-                                            <td>{!! isset($model->hasProfile)?$model->hasProfile->address:'' !!}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>

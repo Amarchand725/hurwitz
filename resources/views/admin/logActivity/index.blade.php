@@ -100,7 +100,7 @@
                                                         <a href="{{route('admin.logActivity.show', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
                                                     @endcan
                                                     @can('logactivity-delete')
-                                                        <button class="btn btn-danger btn-sm delete" data-slug="{{ $model->id }}" data-del-url="{{ route('admin.logactivity.destroy', $model->id) }}"><i class="fa fa-trash"></i> Delete</button>
+                                                        <button class="btn btn-danger btn-sm delete" data-slug="{{ $model->id }}" data-del-url="{{ route('admin.logactivity.destroy', $model->id) }}"><i class="fa fa-trash"></i></button>
                                                     @endcan
                                                 </td>
                                             </tr>

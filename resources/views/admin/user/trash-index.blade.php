@@ -35,6 +35,13 @@
                             <!--end::Breadcrumb-->
                         </div>
                         <!--end::Page title-->
+                        <!--begin::Actions-->
+                        <div class="d-flex align-items-center gap-2 gap-lg-3">
+                            <!--begin::Primary button-->
+                            <a href="{{ route('user.index') }}" title="All Users" class="btn btn-primary btn-sm">View All</a>
+                            <!--end::Primary button-->
+                        </div>
+                        <!--end::Actions-->
                     </div>
                     <!--end::Toolbar container-->
                 </div>
@@ -54,11 +61,7 @@
                                         <!--begin::Item-->
                                         <li class="breadcrumb-item text-muted" style=" width: 100%; ">
                                             <input type="text" id="search" class="form-control" placeholder="Search...">
-                                            <select name="status" id="status" class="form-control" style="margin-left: 5px">
-                                                <option value="All" selected>Search by status</option>
-                                                <option value="1">Active</option>
-                                                <option value="0">InActive</option>
-                                            </select>
+                                            <input type="hidden" id="status" value="All">
                                         </li>
                                         <!--end::Item-->
                                     </ul>
@@ -70,9 +73,8 @@
                                         <tr>
                                             <th  title="Log ID">SNo#</th>
                                             <th  title="Location">Avatar</th>
-                                            <th  title="Location">Role</th>
-                                            <th  title="Location">First Name</th>
-                                            <th  title="Location">Last Name</th>
+                                            <th  title="Location">Name</th>
+                                            <th  title="Location">User Name</th>
                                             <th  title="Location">Phone</th>
                                             <th  title="Location">Email</th>
                                             <th  title="Location">Status</th>
@@ -82,42 +84,39 @@
                                     </thead>
                                     <tbody id="body">
                                         @foreach ($models as $key=>$model)
-                                            @if($model->roles[0]->name != 'Admin')
-                                                <tr id="id-{{ $model->id }}">
-                                                    <td>{{  $models->firstItem()+$key }}.</td>
-                                                    <td>
-                                                        @if($model->hasProfile->avatar)
-                                                            <img src="{{ asset('public/avatar') }}/{{ $model->hasProfile->avatar }}" class="rounded" width="50px" alt="">
-                                                        @else
-                                                            <img src="{{ asset('public/avatar/default.png') }}" width="50px" alt="">
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $model->roles[0]->name }}</td>
-                                                    <td>
-                                                        {{ isset($model->hasProfile)?$model->hasProfile->first_name:$model->name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ isset($model->hasProfile)?$model->hasProfile->last_name:'N/A' }}
-                                                    </td>
-                                                    <td>
-                                                        {{ isset($model->hasProfile)?$model->hasProfile->phone:'N/A' }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $model->email }}
-                                                    </td>
-                                                    <td>
-                                                        @if($model->status)
-                                                            <span class="badge badge-success">Active</span>
-                                                        @else
-                                                            <span class="badge badge-danger">In-Active</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{  date('d, M-Y', strtotime($model->created_at)) }}</td>
-                                                    <td>
-                                                        <a href="{{route('admin.user.restore', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Restore</a>
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                            <tr id="id-{{ $model->id }}">
+                                                <td>{{  $models->firstItem()+$key }}.</td>
+                                                <td>
+                                                    @if($model->avatar)
+                                                        <img src="{{ asset('public/avatar') }}/{{ $model->avatar }}" class="rounded" width="50px" alt="">
+                                                    @else
+                                                        <img src="{{ asset('public/avatar/default.png') }}" width="50px" alt="">
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    {{ $model->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $model->user_name }}
+                                                </td>
+                                                <td>
+                                                    {{ isset($model->hasProfile)?$model->phone:'N/A' }}
+                                                </td>
+                                                <td>
+                                                    {{ $model->email }}
+                                                </td>
+                                                <td>
+                                                    @if($model->status)
+                                                        <span class="badge badge-success">Active</span>
+                                                    @else
+                                                        <span class="badge badge-danger">In-Active</span>
+                                                    @endif
+                                                </td>
+                                                <td>{{  date('d, M-Y', strtotime($model->created_at)) }}</td>
+                                                <td>
+                                                    <a href="{{route('admin.user.restore', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i></a>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                         <tr>
                                             <td colspan="6">
@@ -129,17 +128,11 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <!--end::Table-->
                             </div>
-                            <!--end::Card body-->
                         </div>
-                        <!--end::Card-->
                     </div>
-                    <!--end::Content container-->
                 </div>
-                <!--end::Content-->
             </div>
-            <!--end::Content wrapper-->
         </div>
     </div>
 </div>

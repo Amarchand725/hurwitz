@@ -23,15 +23,15 @@ class RegisteredUserController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('user-list');
         $per_page_records = 10;
         if(!empty(systemSetting())){
             $per_page_records = systemSetting()->per_page_record;
         }
         if($request->ajax()){
-            $query = User::orderby('id', 'desc')->where('id', '>', 0);
+            $query = User::where('id', '!=', 1)->orderby('id', 'desc')->where('id', '>', 0);
             if($request['search'] != ""){
                 $query->where('name', 'like', '%'. $request['search'] .'%');
+                $query->orWhere('user_name', 'like', '%'. $request['search'] .'%');
                 $query->orWhere('email', 'like', '%'. $request['search'] .'%');
             }
             if($request['status'] != "All"){
@@ -42,7 +42,7 @@ class RegisteredUserController extends Controller
         }
         $page_title = 'All users';
         $onlySoftDeleted = User::onlyTrashed()->get();
-        $models = User::orderby('id','DESC')->paginate($per_page_records);
+        $models = User::where('id', '!=', 1)->orderby('id','DESC')->paginate($per_page_records);
         return view('admin.user.index', compact('models', 'page_title', 'onlySoftDeleted'));
     }
     /**
@@ -53,7 +53,6 @@ class RegisteredUserController extends Controller
     public function create()
     {
         if(Auth::check() && Auth::user()->hasRole('Admin')){
-            $this->authorize('user-create');
             $page_title = 'Add New User';
             $roles = Role::orderby('id', 'desc')->where('name', '!=', 'Admin')->where('status', 1)->get();
             return view('admin.user.create', compact('roles', 'page_title'));
@@ -73,42 +72,31 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "roles"    => "required|array|min:1",
-            "roles.*"  => "required|string|distinct|min:1",
-            'first_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'user_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         DB::beginTransaction();
 
-        $name = $request->first_name.' '.$request->last_name;
         try{
-            $user = User::create([
-                'name' => $name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
+            $user = new User();
+            $user->name = $request->name;
+            $user->user_name = $request->user_name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
 
-            $user->assignRole($request->input('roles'));
+            if ($request->avatar) {
+                $avatar = time().'.'.$request->avatar->extension();
+                $request->avatar->move(public_path('avatar'), $avatar);
 
-            if($user){
-                $model = new UserProfile();
-
-                if ($request->avatar) {
-                    $avatar = time().'.'.$request->avatar->extension();
-                    $request->avatar->move(public_path('avatar'), $avatar);
-
-                    $model->avatar = $avatar;
-                }
-
-                $model->user_id = $user->id;
-                $model->first_name = $request->first_name;
-                $model->last_name = $request->first_name;
-                $model->phone = $request->phone;
-                $model->address = $request->address;
-                $model->save();
+                $user->avatar = $avatar;
             }
+
+            $user->save();
+
+            $user->assignRole('User');
 
             event(new Registered($user));
 
@@ -147,20 +135,17 @@ class RegisteredUserController extends Controller
     }
     public function edit($id)
     {
-        $this->authorize('user-edit');
         $page_title = 'Edit User';
         $user = User::find($id);
-        $roles = Role::orderby('id', 'desc')->where('name', '!=', 'Admin')->where('status', 1)->get();
-        return view('admin.user.edit',compact('roles', 'user', 'page_title'));
+        return view('admin.user.edit',compact('user', 'page_title'));
     }
     public function update(Request $request, $id)
     {
         $user = User::find($id);
 
         $request->validate([
-            "roles"    => "required|array|min:1",
-            "roles.*"  => "required|string|distinct|min:1",
-            'first_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'user_name' => ['required', 'string', 'max:255'],
             'email' => 'unique:users,email,'.$user->id,
         ]);
 
@@ -169,32 +154,23 @@ class RegisteredUserController extends Controller
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
         }
-        $name = $request->first_name.' '.$request->last_name;
-        $user->name = $name;
+        $user->name = $request->name;
+        $user->user_name = $request->user_name;
         $user->email = $request->email;
         if(!empty($request->password)){
             $user->password = Hash::make($request->password);
         }
+
+        if ($request->avatar) {
+            $avatar = time().'.'.$request->avatar->extension();
+            $request->avatar->move(public_path('avatar'), $avatar);
+
+            $user->avatar = $avatar;
+        }
+
         $user->save();
 
-        $user->assignRole($request->input('roles'));
-
-        if($user){
-            $model = UserProfile::where('user_id', $user->id)->first();
-
-            if ($request->avatar) {
-                $avatar = time().'.'.$request->avatar->extension();
-                $request->avatar->move(public_path('avatar'), $avatar);
-
-                $model->avatar = $avatar;
-            }
-
-            $model->first_name = $request->first_name;
-            $model->last_name = $request->first_name;
-            $model->phone = $request->phone;
-            $model->address = $request->address;
-            $model->save();
-        }
+        $user->assignRole('User');
 
         \LogActivity::addToLog('User Updated');
 
@@ -209,7 +185,6 @@ class RegisteredUserController extends Controller
     }
     public function destroy($id)
     {
-        $this->authorize('user-delete');
         $ifdeleted = User::findOrFail($id)->delete();
         $onlySoftDeleted = User::onlyTrashed()->count();
         if($ifdeleted){
@@ -231,12 +206,13 @@ class RegisteredUserController extends Controller
             $query = User::where('id', '>', 0);
             if($request['search'] != ""){
                 $query->where('name', 'like', '%'. $request['search'] .'%');
+                $query->orWhere('user_name', 'like', '%'. $request['search'] .'%');
                 $query->orWhere('email', 'like', '%'. $request['search'] .'%');
             }
             if($request['status'] != "All"){
                 $query->where('status', $request['status']);
             }
-            $models = $query->where('deleted_at', '!=', NULL)->paginate($per_page_records);
+            $models = $query->onlyTrashed()->paginate($per_page_records);
             return (string) view('admin.user.trash-search', compact('models'));
         }
         $models = User::onlyTrashed()->paginate($per_page_records);

@@ -1,24 +1,17 @@
 @foreach ($models as $key=>$model)
-    @if($model->roles[0]->name != 'Admin')
+    @if($model->id != 1)
         <tr id="id-{{ $model->id }}">
             <td>{{  $models->firstItem()+$key }}.</td>
             <td>
-                @if($model->hasProfile->avatar)
-                    <img src="{{ asset('public/avatar') }}/{{ $model->hasProfile->avatar }}" class="rounded" width="50px" alt="">
+                @if(!empty($model->avatar))
+                    <img src="{{ asset('public/avatar') }}/{{ $model->avatar }}" class="rounded" width="50px" alt="">
                 @else
                     <img src="{{ asset('public/avatar/default.png') }}" width="50px" alt="">
                 @endif
             </td>
-            <td>{{ $model->roles[0]->name }}</td>
-            <td>
-                {{ isset($model->hasProfile)?$model->hasProfile->first_name:$model->name }}
-            </td>
-            <td>
-                {{ isset($model->hasProfile)?$model->hasProfile->last_name:'N/A' }}
-            </td>
-            <td>
-                {{ isset($model->hasProfile)?$model->hasProfile->phone:'N/A' }}
-            </td>
+            <td>{{ $model->name }}</td>
+            <td>{{ $model->user_name }}</td>
+            <td>{{ $model->phone }}</td>
             <td>
                 {{ $model->email }}
             </td>
@@ -29,14 +22,10 @@
                     <span class="badge badge-danger">In-Active</span>
                 @endif
             </td>
-            <td>{{  date('d, M-Y', strtotime($model->created_at)) }}</td>
             <td>
-                @can('user-edit')
-                    <a href="{{route('user.edit', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</a>
-                @endcan
-                @can('user-delete')
-                    <button class="btn btn-danger btn-sm delete" data-slug="{{ $model->id }}" data-del-url="{{ route('user.destroy', $model->id) }}"><i class="fa fa-trash"></i> Delete</button>
-                @endcan
+                <a href="{{route('user.show', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                <a href="{{route('user.edit', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                <button class="btn btn-danger btn-sm delete" data-slug="{{ $model->id }}" data-del-url="{{ route('user.destroy', $model->id) }}"><i class="fa fa-trash"></i></button>
             </td>
         </tr>
     @endif

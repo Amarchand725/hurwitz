@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('title', $page_title)
 @section('content')
-<input type="hidden" id="page_url" value="{{ route('admin.logActivity') }}">
+<input type="hidden" id="page_url" value="{{ route('admin.logactivity.trash.records') }}">
 <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
     <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
         <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
@@ -35,6 +35,13 @@
                             <!--end::Breadcrumb-->
                         </div>
                         <!--end::Page title-->
+                        <!--begin::Actions-->
+                        <div class="d-flex align-items-center gap-2 gap-lg-3">
+                            <!--begin::Primary button-->
+                            <a href="{{ route('admin.logActivity') }}" title="All Logs" class="btn btn-primary btn-sm">View All</a>
+                            <!--end::Primary button-->
+                        </div>
+                        <!--end::Actions-->
                     </div>
                     <!--end::Toolbar container-->
                 </div>
@@ -87,7 +94,7 @@
                                                 <td>{{  $model->hasUser->name??'N/A' }}</td>
                                                 <td>{{  date('d, M-Y', strtotime($model->created_at)) }}</td>
                                                 <td>
-                                                    <a href="{{route('admin.logactivity.restore', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Restore" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Restore</a>
+                                                    <a href="{{route('admin.logactivity.restore', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Restore" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach

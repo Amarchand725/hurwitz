@@ -74,7 +74,7 @@
                         <!--end::sidebar mobile toggle-->
                         <!--begin::Mobile logo-->
                         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-                            <a href="{{ route('home') }}" class="d-lg-none">
+                            <a href="{{ route('admin.login') }}" class="d-lg-none">
                                 <img alt="Logo" src="{{ $logo }}" class="h-30px" />
                             </a>
                         </div>
@@ -97,21 +97,13 @@
                             <a href="{{ route('admin.dashboard') }}">
                                 <img alt="Logo" src="{{ $logo }}" class="h-55px app-sidebar-logo-default" />
                                 <img alt="Logo" src="{{ $logo }}" class="h-20px app-sidebar-logo-minimize" />
-                                @if(companyProfile())
-                                    @php
-                                        $string = "Progress in Veterinary Science";
-
-                                        function initials($str) {
-                                            $ret = '';
-                                            foreach (explode(' ', $str) as $word)
-                                                $ret .= strtoupper($word[0]);
-                                            return $ret;
-                                        }
-
-                                    @endphp
-                                    {{ initials(companyProfile()->company) }}
-                                @endif
                             </a>
+                            <h2 style="color: #eeb307;">
+                                @if(companyProfile())
+                                    {{ companyProfile()->company }}
+                                @endif
+                            </h2>
+
                             <!--end::Logo image-->
                             <!--begin::Sidebar toggle-->
                             <div id="kt_app_sidebar_toggle" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute top-50 start-100 translate-middle rotate" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">

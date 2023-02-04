@@ -207,8 +207,6 @@
 
                         <!--begin::Actions-->
                         <div class="card-footer d-flex justify-content-end py-6 px-9">
-                            <button type="reset" class="btn btn-white btn-active-light-primary me-2">Discard</button>
-
                             <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">
                                 <!--begin::Indicator-->
                                 <span class="indicator-label">

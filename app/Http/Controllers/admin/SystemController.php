@@ -196,7 +196,9 @@ class SystemController extends Controller
         if($request->ajax()){
             $query = LogActivity::where('id', '>', 0);
             if($request['search'] != ""){
-                $query->where('name', 'like', '%'. $request['search'] .'%');
+                $query->where('subject', 'like', '%'. $request['search'] .'%');
+                $query->orWhere('url', 'like', '%'. $request['search'] .'%');
+                $query->orWhere('ip', 'like', '%'. $request['search'] .'%');
             }
             if($request['status'] != "All"){
                 $query->where('status', $request['status']);

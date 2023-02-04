@@ -88,6 +88,10 @@ class MenuController extends Controller
         DB::beginTransaction();
 
         try{
+            $rel_models = [];
+            if(count($request->rel_tab_names)){
+                $rel_models = $request->rel_tab_names;
+            }
             $model = Menu::create([
                 'menu_of' => Str::lower($request->menu_of),
                 'parent_id' => $request->parent_id,
@@ -95,6 +99,7 @@ class MenuController extends Controller
                 'label' => $request->label,
                 'menu' => str_replace(' ', '_', strtolower($request->menu)),
                 'url' => Str::lower($request->menu_of).'/'.str_replace(' ', '_', strtolower($request->menu)),
+                'rel_models' => json_encode($rel_models),
             ]);
 
             DB::commit();
@@ -237,6 +242,10 @@ class MenuController extends Controller
                         unlink($file);
                     }
                 }
+
+                /* if(json_decode($model->rel_models)){
+
+                } */
 
                 //delete views with all files
                 $modelName = str_replace(' ', '', ucwords($model->menu)) ;
@@ -464,6 +473,46 @@ class MenuController extends Controller
 
 		$this->createFile($newDir , $migration_file_name , $ext , $str1);
 
+        if(count($request->rel_tab_names)){
+            foreach($request->rel_tab_names as $index=>$rel_tab){
+                $column_strings = [];
+                foreach($request->rel_tab_column_names[$index] as $key=>$name){
+                    $default_type = '';
+                    if($request->rel_tab_column_default_types[$index][$key]=='nullable'){
+                        $default_type='->nullable();';
+                    }elseif($request->rel_tab_column_default_types[$index][$key]=='default'){
+                        $default_type='->default("'.$request->defaults[$index][$key].'");';
+                    }else{
+                        $default_type=';';
+                    }
+                    $column_strings[] = '$table->'.$request->rel_tab_column_types[$index][$key].'("'.str_replace(' ', '_', strtolower($name)).'")'.$default_type;
+                }
+
+                $foreign_key = $request->rel_tab_foreign_keys[$index];
+                $column_strings[] = '$table->integer("'.$foreign_key.'");';
+
+                $migration_string = implode(',', $column_strings);
+                $migration_columns = str_replace(',', ' ', $migration_string);
+
+                $migration_file = Str::plural(str_replace(' ', '_', strtolower($rel_tab)));
+                $migration_class_name = Str::plural(str_replace(' ', '', ucwords($rel_tab))) ;
+                $migration_file_name = date('Y_m_d_his').'_create_'.$migration_file ."_table";
+                $root = base_path();
+                $templateFolder = $root ."/crud-template";
+                $newDir = MIGRATION_PATH ;
+                $modelFile = file_get_contents($templateFolder."/migration.php");
+
+                $str1 = str_replace('{MigrationClassName}', $migration_class_name, $modelFile);
+                $str1 = str_replace('{tableName}', $migration_file, $str1);
+                $str1 = str_replace('{tableColumns}', $migration_columns, $str1);
+
+                $ext = ".php";
+                $str1  = "<?php \n". $str1;
+
+                $this->createFile($newDir , $migration_file_name , $ext , $str1);
+            }
+        }
+
         Artisan::call('migrate');
 
 		// echo "Controller Successfully Created at ".$newDir ."/". $migration_file_name ."<BR>";
@@ -547,7 +596,7 @@ class MenuController extends Controller
     }
 
     private function createModel($data){
-    	$modelName = str_replace(' ', '', ucwords($data->menu)) ;
+    	$modelName = str_replace(' ', '', ucwords($data->menu));
         $table_name = Str::plural(str_replace(' ', '_', strtolower($data->menu)));
     	$root = base_path();
     	$templateFolder = $root ."/crud-template";
@@ -556,7 +605,6 @@ class MenuController extends Controller
     	$modelFile = file_get_contents($templateFolder."/model.php");
     	$str1 = str_replace('{modelName}', $modelName, $modelFile);
     	$str1 = str_replace('{tableName}', $table_name, $str1);
-
 
         $columns = DB::select('show columns from ' . $table_name);
 
@@ -575,11 +623,64 @@ class MenuController extends Controller
             }
 		}
 
-		$fieldsName = "'".implode("','", $temp) ."'";
+        $relations = '';
+        if(count($data->rel_tab_names)){
+            foreach($data->rel_tab_names as $index=>$rel_tab){
+                $modelName = str_replace(' ', '', ucwords($rel_tab)) ;
+                $table_name = Str::plural(str_replace(' ', '_', strtolower($rel_tab)));
+                $root = base_path();
+                $templateFolder = $root ."/crud-template";
+                $newDir = MODEL_PATH;
+
+                foreach ($data->rel_tab_relations[$index] as $r_key => $relation) {
+                    $foreign_key = $data->rel_tab_foreign_keys[$r_key];
+                    $relations .= 'public function has'.Str::ucfirst($rel_tab).'(){'.
+                                    '$this->'.$relation.'('.$rel_tab.'::class,"'.$foreign_key.'", "id")'.
+                                '}';
+                }
+
+                $modelFile = file_get_contents($templateFolder."/model.php");
+                $str1 = str_replace('{modelName}', $modelName, $modelFile);
+                $str1 = str_replace('{tableName}', $table_name, $str1);
+
+                $columns = DB::select('show columns from ' . $table_name);
+
+                $temp  = array();
+                $temp2 = array();
+                $conditions  = "";
+                foreach ($columns as $value) {
+                    if ($value->Field != 'id' && $value->Field != 'deleted_at' && $value->Field != 'created_at' && $value->Field != 'updated_at' && $value->Field != 'status') {
+                        $temp[] = $value->Field;
+                        if ($value->Null == "NO") {
+                            $temp2[] .=  "'".$value->Field . "' => 'required'" ;
+                        }
+                        $conditions .='if(!empty(Input::get("'.$value->Field.'"))){
+                        $query->where("'.$value->Field.'","=",Input::get("'.$value->Field.'"));
+                        } ' ."\n";
+                    }
+                }
+
+                $fieldsName = "'".implode("','", $temp) ."'";
+                $rules = implode(",", $temp2);
+                $str1 = str_replace('{fieldsNameOnly}', $fieldsName, $str1);
+                $str1 = str_replace('{rules}', $rules, $str1);
+                $str1 = str_replace('{conditions}', $conditions, $str1);
+                if(!is_dir($newDir)){
+                    mkdir($newDir);
+                }
+
+                $ext = ".php";
+                $str1  = "<?php \n". $str1;
+                $this->createFile($newDir , $modelName , $ext , $str1);
+            }
+        }
+
+        $fieldsName = "'".implode("','", $temp) ."'";
 		$rules = implode(",", $temp2);
 		$str1 = str_replace('{fieldsNameOnly}', $fieldsName, $str1);
 		$str1 = str_replace('{rules}', $rules, $str1);
 		$str1 = str_replace('{conditions}', $conditions, $str1);
+        $str1 = str_replace('{relations}', $relations, $str1);
 		if(!is_dir($newDir)){
 			mkdir($newDir);
 		}

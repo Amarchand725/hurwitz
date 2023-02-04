@@ -15,4 +15,6 @@ class {modelName} extends Model
 		];
 		return $rules;
     }
+
+    {relations}
 }

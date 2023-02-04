@@ -4,13 +4,15 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
-use App\Models\UserProfile;
 use Spatie\Permission\Models\Permission;
-use Auth;
 use Illuminate\Support\Facades\Hash;
+use Auth;
 use DB;
+use App\Models\User;
+use App\Models\UserProfile;
+use App\Models\Book;
+use App\Models\Blog;
+use App\Models\Order;
 
 class AdminController extends Controller
 {
@@ -18,15 +20,31 @@ class AdminController extends Controller
     {
         $page_title = 'Admin Dashboard';
         $data = [];
-        $data['users'] = User::get();
-        $data['active_users'] = User::where('status', 1)->get();
+        $data['total_users'] = User::where('id', '!=', 1)->orderby('id', 'desc')->count();
+        $data['users'] = User::where('id', '!=', 1)->orderby('id', 'desc')->take(5)->get();
+        $data['active_users'] = User::where('id', '!=', 1)->where('status', 1)->get();
         $data['in_active_users'] = User::where('status', 0)->get();
-        $data['new_users'] = User::orderby('id', 'desc')->take(5)->get();
+        $data['new_users'] = User::where('id', '!=', 1)->orderby('id', 'desc')->take(5)->get();
 
-        $data['roles'] = Role::get();
-        $data['active_roles'] = Role::where('status', 1)->get();
-        $data['in_active_roles'] = Role::where('status', 0)->get();
-        $data['new_roles'] = Role::orderby('id', 'desc')->take(5)->get();
+        $data['total_books'] = Book::orderby('id','desc')->count();
+        $data['books'] = Book::orderby('id','desc')->take(5)->get();
+        $data['active_books'] = Book::where('status', 1)->get();
+        $data['in_active_books'] = Book::where('status', 0)->get();
+        $data['new_books'] = Book::orderby('id', 'desc')->take(5)->get();
+
+        $data['total_blogs'] = Blog::orderby('id','desc')->count();
+        $data['blogs'] = Blog::orderby('id','desc')->take(5)->get();
+        $data['active_blogs'] = Blog::where('status', 1)->get();
+        $data['in_active_blogs'] = Blog::where('status', 0)->get();
+        $data['new_blogs'] = Blog::orderby('id', 'desc')->take(5)->get();
+
+        $data['total_orders'] = Order::orderby('id','desc')->count();
+        $data['orders'] = Order::orderby('id','desc')->take(5)->get();
+        $data['pending_orders'] = Order::where('order_status_id', 1)->count(); //pending orders
+        $data['on_the_way_orders'] = Order::where('order_status_id', 2)->count(); //on the way orders
+        $data['delivered_orders'] = Order::where('order_status_id', 3)->count(); //delivered orders
+        $data['cancelled_orders'] = Order::where('order_status_id', 4)->count(); //cancelled orders
+        $data['new_orders'] = Order::orderby('id', 'desc')->take(5)->get();
 
         return view('admin.dashboard', compact('page_title', 'data'));
     }

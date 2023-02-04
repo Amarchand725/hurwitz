@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 @section('title', $page_title)
 @section('content')
-<input type="hidden" id="page_url" value="{{ route('category.index') }}">
+<input type="hidden" id="page_url" value="{{ route('admin.logActivity') }}">
 <div class="d-flex flex-column flex-root app-root" id="kt_app_root">
     <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
         <div class="app-main flex-column flex-row-fluid" id="kt_app_main">

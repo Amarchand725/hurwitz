@@ -7,7 +7,18 @@
         <meta name="description" content="Admin Login Panel"/>
         <meta name="keywords" content="Admin Login Panel"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="shortcut icon" href="{{ asset('public/admin/media/logos/favicon.ico') }}"/>
+        
+        @php
+            $favicon = asset('public/company/logos/default.png');
+        @endphp
+        @if(!empty(companyProfile()) && companyProfile()->favicon)
+            @php
+                $favicon = asset('public/company/favicons').'/'.companyProfile()->favicon;
+            @endphp
+        @endif
+        
+        <!--<link rel="shortcut icon" href="{{ asset('public/admin/media/logos/favicon.ico') }}"/>-->
+        <link rel="shortcut icon" href="{{ $favicon }}"/>
         <meta name="csrf-token" id="token" content="{{ csrf_token() }}" />
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>

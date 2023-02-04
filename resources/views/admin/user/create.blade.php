@@ -32,28 +32,6 @@
                         <!--begin::Input group-->
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-2 col-form-label required fw-bold fs-6">Role</label>
-                            <!--end::Label-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <select name="roles[]" class="selectpicker" multiple data-live-search="true">
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                    @endforeach
-                                </select>
-                                <br />
-                                <span style="color: red">{{ $errors->first('roles') }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-                    </div>
-
-                    <div class="card-body border-top p-9">
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
                             <label class="col-lg-4 col-form-label fw-bold fs-6">Avatar</label>
                             <!--end::Label-->
 
@@ -103,13 +81,13 @@
                         <!--begin::Input group-->
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-2 col-form-label required fw-bold fs-6">First Name</label>
+                            <label class="col-lg-2 col-form-label required fw-bold fs-6">Name</label>
                             <!--end::Label-->
 
                             <!--begin::Col-->
                             <div class="col-lg-8 fv-row">
-                                <input type="text" name="first_name" value="{{ old('first_name') }}" class="form-control form-control-lg form-control-solid" placeholder="Enter first_name"/>
-                                <span style="color: red">{{ $errors->first('first_name') }}</span>
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control form-control-lg form-control-solid" placeholder="Enter name"/>
+                                <span style="color: red">{{ $errors->first('name') }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -118,13 +96,13 @@
                         <!--begin::Input group-->
                         <div class="row mb-6">
                             <!--begin::Label-->
-                            <label class="col-lg-2 col-form-label fw-bold fs-6">Last Name</label>
+                            <label class="col-lg-2 col-form-label fw-bold fs-6">User Name</label>
                             <!--end::Label-->
 
                             <!--begin::Col-->
                             <div class="col-lg-8 fv-row">
-                                <input type="text" name="last_name" value="{{ old('last_name') }}" class="form-control form-control-lg form-control-solid" placeholder="Enter last_name"/>
-                                <span style="color: red">{{ $errors->first('last_name') }}</span>
+                                <input type="text" name="user_name" value="{{ old('user_name') }}" class="form-control form-control-lg form-control-solid" placeholder="Enter user_name"/>
+                                <span style="color: red">{{ $errors->first('user_name') }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -140,21 +118,6 @@
                             <div class="col-lg-8 fv-row">
                                 <input type="tel" name="phone" value="{{ old('phone') }}" class="form-control form-control-lg form-control-solid" placeholder="Enter phone"/>
                                 <span style="color: red">{{ $errors->first('phone') }}</span>
-                            </div>
-                            <!--end::Col-->
-                        </div>
-                        <!--end::Input group-->
-
-                        <!--begin::Input group-->
-                        <div class="row mb-6">
-                            <!--begin::Label-->
-                            <label class="col-lg-2 col-form-label fw-bold fs-6">Address</label>
-                            <!--end::Label-->
-
-                            <!--begin::Col-->
-                            <div class="col-lg-8 fv-row">
-                                <input type="text" name="address" value="{{ old('address') }}" class="form-control form-control-lg form-control-solid" placeholder="Enter address"/>
-                                <span style="color: red">{{ $errors->first('address') }}</span>
                             </div>
                             <!--end::Col-->
                         </div>
@@ -208,7 +171,7 @@
 
                     <!--begin::Actions-->
                     <div class="card-footer d-flex justify-content-end py-6 px-9">
-                        <button type="reset" class="btn btn-white btn-active-light-primary me-2">Discard</button>
+                        <a href="{{ route('user.index') }}" type="reset" class="btn btn-white btn-active-light-primary me-2">Discard</a>
 
                         <button type="submit" class="btn btn-primary" id="kt_account_profile_details_submit">
                             <!--begin::Indicator-->

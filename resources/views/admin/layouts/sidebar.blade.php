@@ -52,241 +52,485 @@
                 <div  class="menu-sub menu-sub-accordion menu-active-bg {{
                                         request()->is('admin/user') ||
                                         request()->is('admin/user/*') ||
-                                        request()->is('admin/menu') ||
-                                        request()->is('admin/menu/*') ||
-                                        request()->is('admin/role') ||
-                                        request()->is('admin/role/*') ||
-                                        request()->is('admin/permission') ||
-                                        request()->is('admin/permission/*') ||
                                         request()->is('admin/system/company/profile') ||
                                         request()->is('admin/system/setting') ||
+                                        request()->is('admin/abouts') ||
+                                        request()->is('admin/helps') ||
                                         request()->is('admin/logActivity') ||
                                         request()->is('admin/logActivity/*') ||
                                         request()->is('admin/system/email-config')
                                         ? 'show' : '' }}" >
                     <!--begin:Menu item-->
+                    <!--begin:Menu item-->
                     <div  class="menu-item" >
                         <!--begin:Menu link-->
-                        @can('menu-list')
-                            <a class="menu-link {{ request()->is('admin/menu') || request()->is('admin/menu/*') ? 'active' : '' }}" href="{{ route('menu.index') }}" title="All Menus" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-bars"></span>
-                                </span>
-                                <span class="menu-title" > Menus</span>
-                            </a>
-                        @endcan
+                        <a class="menu-link {{ request()->is('admin/user') || request()->is('admin/user/*') ? 'active' : '' }}" href="{{ route('user.index') }}" title="All Users" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-user"></span>
+                            </span>
+                            <span class="menu-title" > Users</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+
+                    <!--begin:Menu item-->
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/system/company/profile') || request()->is('admin/system/company/profile/*') ? 'active' : '' }}" href="{{ route('admin.system.company.profile') }}" title="Company Profile" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-building"></span>
+                            </span>
+                            <span class="menu-title" >Company Profile</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                    <div class="menu-item" >
+                        <a class="menu-link {{ request()->is('admin/abouts') ? 'active' : '' }}" href="{{ route('abouts.index') }}" title="About Us" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-building"></span>
+                            </span>
+                            <span class="menu-title" >About Us</span>
+                        </a>
+                    </div>
+                    <div class="menu-item" >
+                        <a class="menu-link {{ request()->is('admin/helps') ? 'active' : '' }}" href="{{ route('helps.index') }}" title="Help & Support" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-building"></span>
+                            </span>
+                            <span class="menu-title" >Help & Support</span>
+                        </a>
+                    </div>
+                    <!--end:Menu item-->
+                    <!--begin:Menu item-->
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/system/setting') || request()->is('admin/system/setting/*') ? 'active' : '' }}" href="{{ route('admin.system.setting') }}" title="Setting" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-cog"></span>
+                            </span>
+                            <span class="menu-title" >Settings</span>
+                        </a>
                         <!--end:Menu link-->
                     </div>
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
                     <div  class="menu-item" >
                         <!--begin:Menu link-->
-                        @can('user-list')
-                            <a class="menu-link {{ request()->is('admin/user') || request()->is('admin/user/*') ? 'active' : '' }}" href="{{ route('user.index') }}" title="All Users" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-user"></span>
-                                </span>
-                                <span class="menu-title" > Users</span>
-                            </a>
-                        @endcan
+                        <a class="menu-link {{ request()->is('admin/system/email-config') || request()->is('admin/system/email-config/*') ? 'active' : '' }}" href="{{ route('admin.email-config') }}" title="Email Configuration" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                            <span class="menu-bullet" >
+                                <span class="fa fa-connectdevelop"></span>
+                            </span>
+                            <span class="menu-title">Email Configuration</span>
+                        </a>
                         <!--end:Menu link-->
                     </div>
                     <!--end:Menu item-->
                     <!--begin:Menu item-->
                     <div  class="menu-item" >
                         <!--begin:Menu link-->
-                        @can('role-list')
-                            <a class="menu-link {{ request()->is('admin/role') || request()->is('admin/role/*') ? 'active' : '' }}" href="{{ route('role.index') }}" title="All Roles" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-briefcase"></span>
-                                </span>
-                                <span class="menu-title" >Roles</span>
-                            </a>
-                        @endcan
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div  class="menu-item" >
-                        <!--begin:Menu link-->
-                        @can('permission-list')
-                            <a class="menu-link {{ request()->is('admin/permission') || request()->is('admin/permission/*') ? 'active' : '' }}" href="{{ route('permission.index') }}" title="Permissions" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-lock"></span>
-                                </span>
-                                <span class="menu-title" >Permissions</span>
-                            </a>
-                        @endcan
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div  class="menu-item" >
-                        <!--begin:Menu link-->
-                        @can('companyprofile-list')
-                            <a class="menu-link {{ request()->is('admin/system/company/profile') || request()->is('admin/system/company/profile/*') ? 'active' : '' }}" href="{{ route('admin.system.company.profile') }}" title="Company Profile" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-building"></span>
-                                </span>
-                                <span class="menu-title" >Company Profile</span>
-                            </a>
-                        @endcan
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div  class="menu-item" >
-                        <!--begin:Menu link-->
-                        @can('setting-list')
-                            <a class="menu-link {{ request()->is('admin/system/setting') || request()->is('admin/system/setting/*') ? 'active' : '' }}" href="{{ route('admin.system.setting') }}" title="Setting" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-cog"></span>
-                                </span>
-                                <span class="menu-title" >Settings</span>
-                            </a>
-                        @endcan
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div  class="menu-item" >
-                        <!--begin:Menu link-->
-                        @can('emailconfig-list')
-                            <a class="menu-link {{ request()->is('admin/system/email-config') || request()->is('admin/system/email-config/*') ? 'active' : '' }}" href="{{ route('admin.email-config') }}" title="Email Configuration" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                <span class="menu-bullet" >
-                                    <span class="fa fa-connectdevelop"></span>
-                                </span>
-                                <span class="menu-title">Email Configuration</span>
-                            </a>
-                        @endcan
-                        <!--end:Menu link-->
-                    </div>
-                    <!--end:Menu item-->
-                    <!--begin:Menu item-->
-                    <div  class="menu-item" >
-                        <!--begin:Menu link-->
-                        @can('logactivity-list')
-                            <a class="menu-link {{ request()->is('admin/logActivity') ? 'active' : '' }}" href="{{ route('admin.logActivity') }}" title="System Log" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-                                <span  class="menu-bullet" >
-                                    <span class="fa fa-tasks"></span>
-                                </span>
-                                <span  class="menu-title" >System Log</span>
-                            </a>
-                        @endcan
+                        <a class="menu-link {{ request()->is('admin/logActivity') ? 'active' : '' }}" href="{{ route('admin.logActivity') }}" title="System Log" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-tasks"></span>
+                            </span>
+                            <span  class="menu-title" >System Log</span>
+                        </a>
                         <!--end:Menu link-->
                     </div>
                     <!--end:Menu item-->
                 </div>
                 <!--end:Menu sub-->
             </div>
-            <!--end:Menu item--><!--begin:Menu item-->
 
-            <!--begin:Menu item-->
-            @foreach (menus() as $menu)
-                @if(Auth::user()->hasRole('Admin') || $menu->menu_of=='general')
-                    @can($menu->menu.'-list')
-                        <div data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
-                            <!--begin:Menu link-->
-                            <span class="menu-link" >
-                                <span  class="menu-icon" >
-                                    <span class="svg-icon svg-icon-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
-                                            <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
-                                            <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
-                                            <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </span>
-                                <span  class="menu-title" >{{ Str::ucfirst($menu->menu) }}</span>
-                                <span  class="menu-arrow" ></span>
+            <!-- Book -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link" >
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Books</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/book') ||
+                                        request()->is('admin/book/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/book') ? 'active' : '' }}" href="{{ route('book.index') }}" title="All Books" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-book"></span>
                             </span>
-                            <!--end:Menu link--><!--begin:Menu sub-->
-                            <div  class="menu-sub menu-sub-accordion menu-active-bg {{
-                                                   request()->is('"'.$menu->url.'"') ||
-                                                    request()->is('"'.$menu->url.'/*"')
-                                                    ? 'show' : '' }}" >
-                                <!--begin:Menu item-->
-                                <div  class="menu-item" >
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->is("'".$menu->url."'") ? 'active' : '' }}" href="{{ route($menu->menu.'.index') }}" title="{{ $menu->lablel }}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                        <span  class="menu-bullet" >{!! $menu->icon !!}</span>
-                                        <span class="menu-title" > {{ $menu->label }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
+                            <span class="menu-title" > All Books</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
 
-                                <!--begin:Menu item-->
-                                <div  class="menu-item" >
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->is("'".$menu->url."/create'") ? 'active' : '' }}" href="{{ route($menu->menu.'.create') }}" title="{{ $menu->lablel }}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                        <span  class="menu-bullet" >{!! $menu->icon !!}</span>
-                                        <span class="menu-title" > Add New {{ Str::ucfirst($menu->menu) }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
-                            </div>
-                            <!--end:Menu sub-->
-                        </div>
-                    @endcan
-                @elseif(Auth::user()->hasRole($menu->menu_of) || $menu->menu_of=='general')
-                    @can($menu->menu.'-list')
-                        <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
-                            <!--begin:Menu link-->
-                            <span class="menu-link" >
-                                <span  class="menu-icon" >
-                                    <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen025.svg-->
-                                    <span class="svg-icon svg-icon-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                            <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
-                                            <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
-                                            <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
-                                            <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
-                                        </svg>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                </span>
-                                <span  class="menu-title" >{{ Str::ucfirst($menu->menu) }}</span>
-                                <span  class="menu-arrow" ></span>
+                    <!--begin:Menu item-->
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/book/create') ? 'active' : '' }}" href="{{ route('book.create') }}" title="Add New Book" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-book"></span>
                             </span>
-                            <!--end:Menu link--><!--begin:Menu sub-->
-                            <div  class="menu-sub menu-sub-accordion menu-active-bg {{
-                                                    request()->is('"'.$menu->url.'"') ||
-                                                    request()->is('"'.$menu->url.'/*"')
-                                                    ? 'show' : '' }}" >
-                                <!--begin:Menu item-->
-                                <div  class="menu-item" >
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->is($menu->url) ? 'active' : '' }}" href="{{ route($menu->menu_of.'.'.$menu->menu.'.index') }}" title="{{ $menu->lablel }}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                        <span  class="menu-bullet" >{!! $menu->icon !!}</span>
-                                        <span class="menu-title" > {{ $menu->label }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
+                            <span class="menu-title" >Add New Book</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-                                <!--begin:Menu item-->
-                                <div  class="menu-item" >
-                                    <!--begin:Menu link-->
-                                    <a class="menu-link {{ request()->is($menu->url.'/create') ? 'active' : '' }}" href="{{ route($menu->menu_of.'.'.$menu->menu.'.create') }}" title="{{ $menu->lablel }}" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
-                                        <span  class="menu-bullet" >{!! $menu->icon !!}</span>
-                                        <span class="menu-title" > Add New {{ Str::ucfirst($menu->menu) }}</span>
-                                    </a>
-                                    <!--end:Menu link-->
-                                </div>
-                                <!--end:Menu item-->
-                            </div>
-                            <!--end:Menu sub-->
+            <!-- Order Types -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Order Types</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/ordertypes') ||
+                                        request()->is('admin/ordertypes/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/ordertypes') ? 'active' : '' }}" href="{{ route('ordertypes.index') }}" title="All Order Types" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-tasks"></span>
+                            </span>
+                            <span class="menu-title" > All Order Types</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+
+                    <!--begin:Menu item-->
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/ordertypes/create') ? 'active' : '' }}" href="{{ route('ordertypes.create') }}" title="Add New Order Type" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-tasks"></span>
+                            </span>
+                            <span class="menu-title" >Add New Order Type</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Orders</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/orders') ||
+                                        request()->is('admin/orders/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/orders') ? 'active' : '' }}" href="{{ route('orders.index') }}" title="All Orders" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-tasks"></span>
+                            </span>
+                            <span class="menu-title" > All Orders</span>
+                        </a>
+                        <!--end:Menu link-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blogs -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Blogs</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/blogs') ||
+                                        request()->is('admin/blogs/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/blogs') ? 'active' : '' }}" href="{{ route('blogs.index') }}" title="All Blogs" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-blog"></span>
+                            </span>
+                            <span class="menu-title" > All Blogs</span>
+                        </a>
+                        <!--end:Menu link-->
+                        <!--begin:Menu item-->
+                        <div  class="menu-item" >
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->is('admin/blogs/create') ? 'active' : '' }}" href="{{ route('blogs.create') }}" title="Add New Order Type" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                                <span  class="menu-bullet" >
+                                    <span class="fa fa-blog"></span>
+                                </span>
+                                <span class="menu-title" >Add New Blog</span>
+                            </a>
                         </div>
-                    @endcan
-                @endif
-            @endforeach
-            <!--end:Menu item--><!--begin:Menu item-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Testimonials</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/testimonials') ||
+                                        request()->is('admin/testimonials/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/testimonials') ? 'active' : '' }}" href="{{ route('testimonials.index') }}" title="All Testimonials" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-quote-left"></span>
+                            </span>
+                            <span class="menu-title" > All Testimonials</span>
+                        </a>
+                        <!--end:Menu link-->
+                        <!--begin:Menu item-->
+                        <div  class="menu-item" >
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->is('admin/testimonials/create') ? 'active' : '' }}" href="{{ route('testimonials.create') }}" title="Add New Order Type" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                                <span  class="menu-bullet" >
+                                    <span class="fa fa-quote-left"></span>
+                                </span>
+                                <span class="menu-title" >Add New Testimonial</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- States -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >States</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/states') ||
+                                        request()->is('admin/states/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/states') ? 'active' : '' }}" href="{{ route('states.index') }}" title="All States" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-quote-left"></span>
+                            </span>
+                            <span class="menu-title" > All States</span>
+                        </a>
+                        <!--end:Menu link-->
+                        <!--begin:Menu item-->
+                        <div  class="menu-item" >
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->is('admin/states/create') ? 'active' : '' }}" href="{{ route('states.create') }}" title="Add New Order Type" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                                <span  class="menu-bullet" >
+                                    <span class="fa fa-quote-left"></span>
+                                </span>
+                                <span class="menu-title" >Add New State</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Faqs -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >FAQs</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/faqs') ||
+                                        request()->is('admin/faqs/*')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/faqs') ? 'active' : '' }}" href="{{ route('faqs.index') }}" title="All faqs" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-quote-left"></span>
+                            </span>
+                            <span class="menu-title" > All faqs</span>
+                        </a>
+                        <!--end:Menu link-->
+                        <!--begin:Menu item-->
+                        <div  class="menu-item" >
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->is('admin/faqs/create') ? 'active' : '' }}" href="{{ route('faqs.create') }}" title="Add New Order Type" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                                <span  class="menu-bullet" >
+                                    <span class="fa fa-quote-left"></span>
+                                </span>
+                                <span class="menu-title" >Add New FAQ</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contacted Us -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Contacted Us</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/contacts')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/contacts') ? 'active' : '' }}" href="{{ route('contacts.index') }}" title="All Contacted Us" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-quote-left"></span>
+                            </span>
+                            <span class="menu-title" > All Contacted us</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcement -->
+            <div  data-kt-menu-trigger="click"  class="menu-item menu-accordion" >
+                <!--begin:Menu link-->
+                <span class="menu-link">
+                    <span  class="menu-icon">
+                        <span class="svg-icon svg-icon-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                                <rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2" fill="currentColor"/>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span  class="menu-title" >Announcement</span>
+                    <span  class="menu-arrow" ></span>
+                </span>
+                <!--end:Menu link--><!--begin:Menu sub-->
+                <div  class="menu-sub menu-sub-accordion menu-active-bg {{
+                                        request()->is('admin/announcements') ||
+                                        request()->is('admin/announcements/create')
+                                        ? 'show' : '' }}" >
+                    <div  class="menu-item" >
+                        <!--begin:Menu link-->
+                        <a class="menu-link {{ request()->is('admin/announcements') ? 'active' : '' }}" href="{{ route('announcements.index') }}" title="All Contacted Us" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-bell"></span>
+                            </span>
+                            <span class="menu-title" > All Contacted us</span>
+                        </a>
+                        <a class="menu-link {{ request()->is('admin/announcements/create') ? 'active' : '' }}" href="{{ route('announcements.create') }}" title="All Contacted Us" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right" >
+                            <span  class="menu-bullet" >
+                                <span class="fa fa-bell"></span>
+                            </span>
+                            <span class="menu-title" > Add New Announcement</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!--end::Menu-->
     </div>
-    <!--end::Menu wrapper-->
 </div>

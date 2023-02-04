@@ -21,6 +21,7 @@ class CreateMenusTable extends Migration
             $table->string('icon');
             $table->string('label');
             $table->text('url');
+            $table->text('rel_models')->nullable();
             $table->boolean('status')->default(1);
             $table->string('deleted_at')->nullable();
             $table->timestamps();

@@ -47,7 +47,7 @@
                             <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
                                 <div></div>
                                 <!--begin::Link-->
-                                <a href="{{ route('password.request') }}" class="link-primary">Forgot Password ?</a>
+                                <!--<a href="{{ route('password.request') }}" class="link-primary">Forgot Password ?</a>-->
                                 <!--end::Link-->
                             </div>
                             <!--end::Wrapper-->
@@ -81,23 +81,13 @@
                             $logo = asset('public/company/logos').'/'.companyProfile()->logo;
                         @endphp
                     @endif
-                    <a href="{{ route('home') }}" class="mb-12">
+                    <a href="{{ route('admin.login') }}" class="mb-12">
                         <img alt="Logo" src="{{ $logo }}" class="h-75px">
                     </a>
                     <!--end::Logo-->
                     <!--begin::Image-->
                     <img class="mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20" src="{{ asset('public/admin/media/misc/auth-screens.png') }}" alt="">
                     <!--end::Image-->
-                    <!--begin::Title-->
-                    <h1 class="text-white fs-2qx fw-bolder text-center mb-7">Fast, Efficient and Productive</h1>
-                    <!--end::Title-->
-                    <!--begin::Text-->
-                    <div class="text-white fs-base text-center">In this kind of post,
-                        <a href="#" class="opacity-75-hover text-warning fw-bold me-1">the blogger</a>introduces a person they’ve interviewed
-                        <br>and provides some background information about
-                        <a href="#" class="opacity-75-hover text-warning fw-bold me-1">the interviewee</a>and their
-                        <br>work following this is a transcript of the interview.</div>
-                    <!--end::Text-->
                 </div>
                 <!--end::Content-->
             </div>

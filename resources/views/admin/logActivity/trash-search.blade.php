@@ -9,7 +9,7 @@
         <td>{{  $model->hasUser->name??'N/A' }}</td>
         <td>{{  date('d, M-Y', strtotime($model->created_at)) }}</td>
         <td>
-            <a href="{{route('admin.logactivity.restore', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Restore" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Restore</a>
+            <a href="{{route('admin.logactivity.restore', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Restore" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i></a>
         </td>
     </tr>
 @endforeach

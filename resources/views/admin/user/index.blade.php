@@ -82,8 +82,9 @@
                                         <tr>
                                             <th  title="Log ID">SNo#</th>
                                             <th  title="Location">Avatar</th>
-                                            <th  title="Location">Role</th>
-                                            <th  title="Location">Full Name</th>
+                                            <th  title="Location">Name</th>
+                                            <th  title="Location">User Name</th>
+                                            <th  title="Location">Phone</th>
                                             <th  title="Location">Email</th>
                                             <th  title="Location">Status</th>
                                             <th  title="Action">Action</th>
@@ -91,46 +92,34 @@
                                     </thead>
                                     <tbody id="body">
                                         @foreach ($models as $key=>$model)
-                                            @if($model->roles[0]->name != 'Admin')
-                                                <tr id="id-{{ $model->id }}">
-                                                    <td>{{  $models->firstItem()+$key }}.</td>
-                                                    <td>
-                                                        @if($model->hasProfile->avatar)
-                                                            <img src="{{ asset('public/avatar') }}/{{ $model->hasProfile->avatar }}" class="rounded" width="50px" alt="">
-                                                        @else
-                                                            <img src="{{ asset('public/avatar/default.png') }}" width="50px" alt="">
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <ul>
-                                                            @foreach ($model->roles as $role)
-                                                                <li>{{ $role->name }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </td>
-                                                    <td>{{ $model->name }}</td>
-                                                    <td>
-                                                        {{ $model->email }}
-                                                    </td>
-                                                    <td>
-                                                        @if($model->status)
-                                                            <span class="badge badge-success">Active</span>
-                                                        @else
-                                                            <span class="badge badge-danger">In-Active</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        <a href="{{route('admin.user.create-spacial-permission', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Assign Spacial Permissions" class="btn btn-warning btn-sm"><i class="fa fa-lock"></i></a>
-                                                        <a href="{{route('user.show', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                                        @can('user-edit')
-                                                            <a href="{{route('user.edit', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                        @endcan
-                                                        @can('user-delete')
-                                                            <button class="btn btn-danger btn-sm delete" data-slug="{{ $model->id }}" data-del-url="{{ route('user.destroy', $model->id) }}"><i class="fa fa-trash"></i></button>
-                                                        @endcan
-                                                    </td>
-                                                </tr>
-                                            @endif
+                                            <tr id="id-{{ $model->id }}">
+                                                <td>{{  $models->firstItem()+$key }}.</td>
+                                                <td>
+                                                    @if(!empty($model->avatar))
+                                                        <img src="{{ asset('public/avatar') }}/{{ $model->avatar }}" class="rounded" width="50px" alt="">
+                                                    @else
+                                                        <img src="{{ asset('public/avatar/default.png') }}" width="50px" alt="">
+                                                    @endif
+                                                </td>
+                                                <td>{{ $model->name }}</td>
+                                                <td>{{ $model->user_name }}</td>
+                                                <td>{{ $model->phone }}</td>
+                                                <td>
+                                                    {{ $model->email }}
+                                                </td>
+                                                <td>
+                                                    @if($model->status)
+                                                        <span class="badge badge-success">Active</span>
+                                                    @else
+                                                        <span class="badge badge-danger">In-Active</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{route('user.show', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Show Details" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                                    <a href="{{route('user.edit', $model->id)}}" data-toggle="tooltip" data-placement="top" title="Edit user" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                                    <button class="btn btn-danger btn-sm delete" data-slug="{{ $model->id }}" data-del-url="{{ route('user.destroy', $model->id) }}"><i class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                         <tr>
                                             <td colspan="6">
