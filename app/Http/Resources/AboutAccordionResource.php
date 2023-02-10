@@ -17,8 +17,7 @@ class AboutAccordionResource extends JsonResource
          return [
             'id' => $this->id,
             'title' => checkIsset($this->title),
-              'details' => checkIsset($this->details),
-            
+            'details' => checkIsset($this->details),
         ];
     }
 }

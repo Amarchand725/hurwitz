@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Userdetail extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $guarded = '';
+
     function country()
     {
         return $this->belongsTo(Country::class);

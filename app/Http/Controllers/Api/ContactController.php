@@ -8,14 +8,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 use Str;
 
 class ContactController extends Controller
 {
     public function submit(Request $request)
     {
-        $user = getUserToken($request->bearerToken());
-        if (!empty($user)) {
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
+        }else{
+            $user = $token->tokenable;
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required',
                 'email' => 'required',

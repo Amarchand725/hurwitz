@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 use Str;
 
 class AnnouncementController extends Controller
@@ -18,14 +19,25 @@ class AnnouncementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $announcements = Announcement::orderby('created_at', 'desc')->get();
-        if ($announcements->count() > 0) {
-            $resource = AnnouncementResource::collection($announcements);
-            return apiResponse(true, "Announcements List", $resource, 200);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response, 422);
+        }else{
+            $announcements = Announcement::orderby('created_at', 'desc')->get();
+            if ($announcements->count() > 0) {
+                $resource = AnnouncementResource::collection($announcements);
+                return apiResponse(true, "Announcements List", $resource, 200);
+            }
+            return  apiResponse(true, "Announcements List Empty", null, 500);
         }
-        return  apiResponse(true, "Announcements List Empty", null, 500);
     }
 
     /**

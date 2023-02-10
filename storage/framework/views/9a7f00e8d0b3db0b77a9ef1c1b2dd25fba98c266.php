@@ -4,4 +4,4 @@
 <link href="<?php echo e(asset('public/admin')); ?>/css/style.bundle.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="<?php echo e(asset('public/admin/css/toastr.min.css')); ?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
-<?php /**PATH C:\wamp\www\hurwitz\resources\views/admin/layouts/styles.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\wamp\www\newhurwitz\resources\views/admin/layouts/styles.blade.php ENDPATH**/ ?>

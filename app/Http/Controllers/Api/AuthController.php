@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Laravel\Ui\Presets\React;
+use Laravel\Sanctum\PersonalAccessToken;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -52,17 +54,14 @@ class AuthController extends Controller
             return response()->json(['success' => false, 'message' => 'Please Enter Password'], 500);
         }
         try {
-            $token = Str::random(50);
             $user  = User::create([
                 'name' => $request->name,
                 'phone' => $request->phone,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'remember_token' => $token,
             ]);
             if ($user->id) {
                 $user = User::where('id', $user->id)->first();
-                updateAuthToken($user->id, $token);
                 $resource = new UserResource($user);
                 return response()->json(['success' => true, 'message' => 'Successfuly Registered', 'user' => $resource], 200);
             }
@@ -73,8 +72,6 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-    
-  
         if (empty($request->email)) {
             return response()->json(['success' => false, 'message' => 'Please Enter Email'], 500);
         }
@@ -97,15 +94,29 @@ class AuthController extends Controller
                 return response()->json(['success' => false, 'message' => 'Invalid Password'], 500);
             }
         }
-        if ($user->email == $request->email && Hash::check($request->password, $user->password)) {
-            $token = Str::random(50);
-            updateAuthToken($user->id, $token);
-            $user = User::where("id", $user->id)->first();
-            $user_data = new UserResource($user);
-            return response()->json(['success' => true, 'message' => 'Successfuly Logged In', 'user' => $user_data], 200);
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+            $user = $request->user();
+
+            $data['token'] = $user->createToken('MyApp')->plainTextToken;
+            $data['user'] =  new UserResource($user);
+
+            $response = [
+                'success' => true,
+                'data' => $data,
+                'message' => 'You login successfully.',
+            ];
+
+            return response()->json($response, 200);
+        }else{
+            $response = [
+                'success' => false,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
         }
-        return response()->json(['success' => false, 'message' => 'Error occured in User login, Please Try Again!'], 500);
     }
+
     public function forgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -116,22 +127,67 @@ class AuthController extends Controller
         }
         $user = User::where('email', $request->email)->first();
         if (empty($user)) {
-            return apiResponse(false, "User does not exist with this Email ID", null, 500);
-        }
-        $old_code = PasswordResetCode::where('user_id', $user->id)->where('status', 0)->get();
-        foreach ($old_code as $index => $value) {
-            $value->update(['status' => 1]);
+            return apiResponse(false, "Email is invalid", null, 500);
         }
 
-        $code = generateOTP($user->id);
-        $saveCode = saveOTP($code, $user->id);
+        do{
+            $password_otp = rand(10000, 99999);
+        }while(User::where('password_otp', $password_otp)->first());
+
+        $user->password_otp = $password_otp;
+        $user->update();
+
         $details  = [
             'name' => $user->name,
-            'otp' =>  $code,
+            'otp' =>  $password_otp,
         ];
-        Mail::to($user->email)->send(new ForgotPassword($details));
+
+        \Mail::to($user->email)->send(new ForgotPassword($details));
+
         return apiResponse(true, "OTP has been sent to your email address", null, 200);
     }
+
+    public function verifyAccountForPassword(Request $request)
+    {
+        $user = User::where('email', $request->email)->where('password_otp', $request->otp)->first();
+        if (empty($user)) {
+            return apiResponse(false, "OTP is invalid", null, 500);
+        }else{
+            $user->password_otp = '';
+            $user->password = '';
+            $user->save();
+
+            $secure_data = [
+                'email' => $user->email,
+            ];
+            return apiResponse(true, "Account verified successfully. Now you can change password.", $secure_data, 200);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        if (empty($request->new_password)) {
+            return response()->json(['success' => false, 'message' => 'Please Enter New Password'], 500);
+        }
+        if (empty($request->confirm_password)) {
+            return response()->json(['success' => false, 'message' => 'Please Enter Confirm Password'], 500);
+        }
+
+        if ($request->new_password != $request->confirm_password) {
+            return response()->json(['success' => false, 'message' => 'Password not confirmed try again.!'], 500);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if (empty($user)) {
+            return apiResponse(false, "Something went wrong please contact with support.", null, 500);
+        }else{
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return apiResponse(true, "You have changed password successfully.", null, 200);
+        }
+    }
+
     public function verifyOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -155,139 +211,197 @@ class AuthController extends Controller
     }
     public function changePassword(Request $request)
     {
-        $msgs = [
-            'password.confirmed' => 'Confirm Password does not match',
-        ];
-        $validator = Validator::make($request->all(), [
-            'old_password' => 'required|string',
-            'password' => 'required|string|confirmed',
-            'password_confirmation' => 'required',
-        ], $msgs);
-        if ($validator->fails()) {
-            return apiResponse(false, $validator->errors()->all(), null, 500);
-        }
-        $user = getUserToken($request->bearerToken());
-        if (!Hash::check($request->old_password, $user->password)) {
-            return apiResponse(false, 'Invalid Old Password', null, 500);
-        }
-        $update = $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-        if ($update > 0) {
-            return apiResponse(true, "Password has been changed", $user, 200);
-        } else {
-            return apiResponse(false, "Failed to chagne password", null, 500);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
+        }else{
+            $msgs = [
+                'password.confirmed' => 'Confirm Password does not match',
+            ];
+            $validator = Validator::make($request->all(), [
+                'old_password' => 'required|string',
+                'password' => 'required|string|confirmed',
+                'password_confirmation' => 'required',
+            ], $msgs);
+            if ($validator->fails()) {
+                return apiResponse(false, $validator->errors()->all(), null, 500);
+            }
+            $user = getUserToken($request->bearerToken());
+            if (!Hash::check($request->old_password, $user->password)) {
+                return apiResponse(false, 'Invalid Old Password', null, 500);
+            }
+            $update = $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+            if ($update > 0) {
+                return apiResponse(true, "Password has been changed", $user, 200);
+            } else {
+                return apiResponse(false, "Failed to chagne password", null, 500);
+            }
         }
     }
     public function changePasswordWithoutToken(Request $request)
     {
-        $msgs = [
-            'password.confirmed' => 'Confirm Password does not match',
-        ];
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|string|confirmed',
-            'password_confirmation' => 'required',
-        ], $msgs);
-        if ($validator->fails()) {
-            return apiResponse(false, $validator->errors()->all(), null, 500);
-        }
-        $user = User::where('email', $request->email)->first();
-        if (empty($user)) {
-            return apiResponse(false, "User not found", null, 500);
-        }
-        $update = $user->update([
-            'password' => Hash::make($request->password),
-        ]);
-        if ($update > 0) {
-            $user = new UserResource($user);
-            return apiResponse(true, "Password has been changed", $user, 200);
-        } else {
-            return apiResponse(false, "Failed to chagne password", null, 500);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
+        }else{
+            $msgs = [
+                'password.confirmed' => 'Confirm Password does not match',
+            ];
+            $validator = Validator::make($request->all(), [
+                'password' => 'required|string|confirmed',
+                'password_confirmation' => 'required',
+            ], $msgs);
+            if ($validator->fails()) {
+                return apiResponse(false, $validator->errors()->all(), null, 500);
+            }
+            $user = User::where('email', $request->email)->first();
+            if (empty($user)) {
+                return apiResponse(false, "User not found", null, 500);
+            }
+            $update = $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+            if ($update > 0) {
+                $user = new UserResource($user);
+                return apiResponse(true, "Password has been changed", $user, 200);
+            } else {
+                return apiResponse(false, "Failed to chagne password", null, 500);
+            }
         }
     }
     public function getProfile(Request $request)
     {
-        $user = getUserToken($request->bearerToken());
-        if (empty($user)) {
-            return apiResponse(false, "User not found", null, 500);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
+        }else{
+            $user = $token->tokenable;
+            $user = new UserResource($user);
+            return apiResponse(true, "User Profile", $user, 200);
         }
-        return apiResponse(true, "User Profile", $user, 200);
     }
     public function updateProfile(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return apiResponse(false, $validator->errors()->all(), null, 500);
-        }
-        $user = getUserToken($request->bearerToken());
-        if (empty($user)) {
-            return apiResponse(false, "User not found", null, 500);
-        }
-        $update = $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-        ]);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
 
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
 
-        $details = Userdetail::where('user_id', $user->id)->first();
-        // return $request;
-        if (!empty($details) && isset($details)) {
-
-            $details->user_id = $user->id;
-            $details->country_id = $request->country_id;
-            $details->city_id = $request->city_id;
-            $details->state_id = $request->state_id;
-            $details->postal_code = $request->postal_code;
-            $details->save();
-        } else {
-
-            $details = Userdetail::create([
-                'user_id' => $user->id,
-                'country_id' => $request->country_id,
-                'city_id' => $request->city_id,
-                'state_id' => $request->state_id,
-                'postal_code' => $request->postal_code,
+            return response()->json($response);
+        }else{
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required'
             ]);
-        }
+            if ($validator->fails()) {
+                return apiResponse(false, $validator->errors()->all(), null, 500);
+            }
+            $user = $token->tokenable;
+            $update = $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ]);
 
 
-        if ($update > 0) {
-            $updated =  User::where('id', $user->id)->with('userdetail')->first();
-            $user = new UserResource($updated);
-            return apiResponse(true, "User Profile Updated", $user, 200);
+            $details = Userdetail::where('user_id', $user->id)->first();
+            // return $request;
+            if (!empty($details) && isset($details)) {
+                $details->user_id = $user->id;
+                $details->country_id = $request->country_id;
+                $details->city_id = $request->city_id;
+                $details->state_id = $request->state_id;
+                $details->postal_code = $request->postal_code;
+                $details->save();
+            } else {
+                $details = Userdetail::create([
+                    'user_id' => $user->id,
+                    'country_id' => $request->country_id,
+                    'city_id' => $request->city_id,
+                    'state_id' => $request->state_id,
+                    'postal_code' => $request->postal_code,
+                ]);
+            }
+
+            if ($update > 0) {
+                $updated =  User::where('id', $user->id)->with('userdetail')->first();
+                $user = new UserResource($updated);
+                return apiResponse(true, "User Profile Updated", $user, 200);
+            }
+            return apiResponse(false, "User profile not updated", null, 500);
         }
-        return apiResponse(false, "User profile not updated", null, 500);
     }
     public function verifyToken(Request $request)
     {
-        $user = getUserToken($request->bearerToken());
-        if (empty($user)) {
-            return apiResponse(false, "User not found or may be logged out", null, 500);
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
+        }else{
+            $user = $token->tokenable;
+            $user = new UserResource($user);
+            return apiResponse(true, "User Authorization Verified", $user, 200);
         }
-        return apiResponse(true, "User Authorization Verified", $user, 200);
     }
 
     public function user_delete(Request $request)
     {
-        $user = getUserToken($request->bearerToken());
-        if (empty($user)) {
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'code' => 422,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response);
+        }else{
+            $user = $token->tokenable;
+
+            $check_user = User::with('userdetail')->where('id', $user->id)->first();
+            if (isset($check_user) && !empty($check_user)) {
+                if (!empty($check_user->userdetail)) {
+                    $check_user->userdetail->delete();
+                }
+                $check_user->delete();
+
+                return apiResponse(true, 'User successfuly deleted.', null, 200);
+            }
             return apiResponse(false, 'User not found', null, 500);
         }
-
-        $check_user = User::with('userdetail')->where('id', $user->id)->first();
-        if (isset($check_user) && !empty($check_user)) {
-            if (!empty($check_user->userdetail)) {
-                $check_user->userdetail->delete();
-            }
-            $check_user->delete();
-
-            return apiResponse(true, 'User successfuly deleted.', null, 200);
-        }
-        return apiResponse(false, 'User not found', null, 500);
     }
 }

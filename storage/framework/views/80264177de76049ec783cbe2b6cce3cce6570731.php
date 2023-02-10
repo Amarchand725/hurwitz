@@ -421,4 +421,4 @@
         </script>
     </body>
 </html>
-<?php /**PATH C:\wamp\www\peter-paulsen\resources\views/admin/layouts/app.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\wamp\www\newhurwitz\resources\views/admin/layouts/app.blade.php ENDPATH**/ ?>

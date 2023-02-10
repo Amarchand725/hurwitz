@@ -7,7 +7,18 @@
         <meta name="description" content="Admin Login Panel"/>
         <meta name="keywords" content="Admin Login Panel"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="shortcut icon" href="<?php echo e(asset('public/admin/media/logos/favicon.ico')); ?>"/>
+        
+        <?php
+            $favicon = asset('public/company/logos/default.png');
+        ?>
+        <?php if(!empty(companyProfile()) && companyProfile()->favicon): ?>
+            <?php
+                $favicon = asset('public/company/favicons').'/'.companyProfile()->favicon;
+            ?>
+        <?php endif; ?>
+        
+        <!--<link rel="shortcut icon" href="<?php echo e(asset('public/admin/media/logos/favicon.ico')); ?>"/>-->
+        <link rel="shortcut icon" href="<?php echo e($favicon); ?>"/>
         <meta name="csrf-token" id="token" content="<?php echo e(csrf_token()); ?>" />
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>
@@ -53,4 +64,4 @@
         <?php echo $__env->yieldPushContent('js'); ?>
     </body>
 </html>
-<?php /**PATH C:\wamp\www\peter-paulsen\resources\views/admin/auth/layouts/app.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\wamp\www\newhurwitz\resources\views/admin/auth/layouts/app.blade.php ENDPATH**/ ?>

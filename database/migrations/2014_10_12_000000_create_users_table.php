@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->default(1);
+            $table->integer('password_otp')->nullable();
             $table->boolean('status')->default(1);
             $table->string('deleted_at')->nullable();
             $table->rememberToken();

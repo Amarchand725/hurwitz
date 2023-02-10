@@ -18,7 +18,7 @@ class HelpAndSupportResource extends JsonResource
             'id' => $this->id,
             'title' => checkIsset($this->title),
             'description' => checkIsset($this->description),
-            'image' => isset($this->image) && !empty($this->image) ? asset(config('upload_path.helps') . $this->image) : null,
+            'image' => isset($this->image) && !empty($this->image) ? asset('public/images/helps/' . $this->image) : null,
         ];
     }
 }

@@ -160,7 +160,7 @@ Route::group(['prefix'=>'admin', 'middleware' => 'auth'], function() {
 });
 
 Route::get('privacy-policy', function () {
-    return view('privacy');
+    return view('privacy-policy');
 });
 
 Route::get('terms-condition', function () {

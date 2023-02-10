@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\AboutAccordion;
 
 class AboutResource extends JsonResource
 {
@@ -24,7 +25,8 @@ class AboutResource extends JsonResource
             'image_2' => isset($this->image_2) && !empty($this->image_2) ? asset(config('upload_path.about_us') . $this->image_2) : null,
             'image_3' => isset($this->image_3) && !empty($this->image_3) ? asset(config('upload_path.about_us') . $this->image_3) : null,
             'qoute' => checkIsset($this->qoute),
-            //   'Accordion' => new AboutAccordionResource(AboutAccordion::all()),
+            'accordion'=> isset($this->aboutAccordions) && !empty($this->aboutAccordions) ? AboutAccordionResource::collection($this->aboutAccordions) : null,
+            // 'Accordion' => new AboutAccordionResource(AboutAccordion::all()),
         ];
     }
 }

@@ -43,15 +43,20 @@ Route::get('get-subcategories-of-category/{id}', [CategoryController::class, 'ca
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('verify-account-for-password', [AuthController::class, 'verifyAccountForPassword']);
+Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
 Route::post('verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('change-password-withouttoken', [AuthController::class, 'changePasswordWithoutToken']);
 Route::get('providers', [SocialController::class, 'getProviders']);
 Route::post('social-login', [SocialController::class, 'login']);
 Route::get('get-books', [BookController::class, 'index']);
+Route::get('get-home', [BookController::class, 'getHome']);
 Route::get('book-details/{id}', [BookController::class, 'show']);
 
-Route::group(['middleware' => 'api_auth'], function () {
+// Route::group(['middleware' => 'api_auth'], function () {
     Route::get('get-profile', [AuthController::class, 'getProfile']);
     Route::post('update-profile', [AuthController::class, 'updateProfile']);
     Route::get('verify-token', [AuthController::class, 'verifyToken']);
@@ -87,4 +92,4 @@ Route::group(['middleware' => 'api_auth'], function () {
     // Route::post('post-your-bid', [BiddingController::class, 'saveBid']);
 
     Route::get('user-delete', [AuthController::class, 'user_delete']);
-});
+// });

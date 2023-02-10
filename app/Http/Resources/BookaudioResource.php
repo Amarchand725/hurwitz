@@ -15,7 +15,7 @@ class BookaudioResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'src' => isset($this->audio) && !empty($this->audio) ? asset(config('upload_path.book_audios') . $this->audio)  : null,
+            'src' => isset($this->audio) && !empty($this->audio) ? asset('public/images/books/' . $this->audio)  : null,
         ];
     }
 }

@@ -164,4 +164,4 @@
     </script>
 <?php $__env->stopPush(); ?>
 
-<?php echo $__env->make('admin.auth.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\wamp\www\peter-paulsen\resources\views/admin/auth/login.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('admin.auth.layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\wamp\www\newhurwitz\resources\views/admin/auth/login.blade.php ENDPATH**/ ?>

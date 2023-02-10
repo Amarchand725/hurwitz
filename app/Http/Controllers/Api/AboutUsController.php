@@ -9,14 +9,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 use Str;
 
 class AboutUsController extends Controller
 {
     public function index(Request $request)
     {
-        $user = getUserToken($request->bearerToken());
-        if (!empty($user)) {
+        $token = PersonalAccessToken::findToken($request->bearerToken());
+
+        if (!$token) {
+            $response = [
+                'success' => false,
+                'message' => 'Credentials not found.'
+            ];
+
+            return response()->json($response, 422);
+        }else{
             $about = AboutUs::orderby("id", "desc")->first();
             if (!empty($about)) {
                 $resource = new AboutResource($about);
@@ -24,6 +33,5 @@ class AboutUsController extends Controller
             }
             return apiResponse(false, "About Us Not Found", null, 500);
         }
-        return apiResponse(false, "User not found", null, 500);
     }
 }

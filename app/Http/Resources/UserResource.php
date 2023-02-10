@@ -20,7 +20,6 @@ class UserResource extends JsonResource
             'email' =>  checkIsset($this->email),
             'phone' =>  checkIsset($this->phone),
             'userdetails' => checkIsset( new UserdetailResource($this->userdetail)),
-            'token' => checkIsset($this->remember_token),
             'created_at' => $this->created_at->format('M, j Y H:i A'),
         ];
     }

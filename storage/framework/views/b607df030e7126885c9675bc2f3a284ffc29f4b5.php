@@ -260,4 +260,4 @@
     </div>
     <!--end::Navbar-->
 </div>
-<?php /**PATH C:\wamp\www\peter-paulsen\resources\views/admin/layouts/header.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\wamp\www\newhurwitz\resources\views/admin/layouts/header.blade.php ENDPATH**/ ?>

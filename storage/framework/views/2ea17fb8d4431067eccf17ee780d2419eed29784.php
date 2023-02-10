@@ -524,4 +524,4 @@
         </div>
     </div>
 </div>
-<?php /**PATH C:\wamp\www\hurwitz\resources\views/admin/layouts/sidebar.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\wamp\www\newhurwitz\resources\views/admin/layouts/sidebar.blade.php ENDPATH**/ ?>
